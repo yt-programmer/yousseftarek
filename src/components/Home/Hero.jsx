@@ -11,7 +11,7 @@ const Hero = () => {
           <motion.h2
             initial={{ y: -100, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
+            transition={{ duration: 0.6 }}
             className="text-4xl  md:text-start font-extrabold text-center"
           >
             Hi I'm Youssef Tarek{" "}
@@ -22,7 +22,7 @@ const Hero = () => {
           <motion.p
             initial={{ x: -100, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
+            transition={{ duration: 0.6 }}
             className="text-center md:text-start text-gray-400 mt-10 font-semibold text-sm"
           >
             Building modern web experiences and Turning ideas into interactive
@@ -31,7 +31,7 @@ const Hero = () => {
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
+            transition={{ duration: 0.6 }}
           >
             <Link to="/works" className="">
               <Button
@@ -47,7 +47,7 @@ const Hero = () => {
           <motion.img
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
+            transition={{ duration: 0.6 }}
             src="/joo.webp"
             className="max-w-[300px] md:max-w-[400px] rounded-full shadow-2xl"
             alt="error img"
@@ -56,7 +56,7 @@ const Hero = () => {
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
+            transition={{ duration: 0.6 }}
             className="flex mt-3 gap-3 items-center text-2xl text-blue-600"
           >
             <MdVerified />
