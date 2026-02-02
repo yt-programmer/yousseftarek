@@ -47,7 +47,7 @@ const Hero = () => {
           <motion.img
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 1 }}
             src="/joo.webp"
             className="max-w-[300px] md:max-w-[400px] rounded-full shadow-2xl"
             alt="error img"
