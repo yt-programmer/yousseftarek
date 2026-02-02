@@ -101,6 +101,7 @@ const Form = () => {
         <Button
           type="submit"
           variant="outlined"
+          name="Send"
           sx={{
             borderColor: "var(--color-primary)",
             color: "white",

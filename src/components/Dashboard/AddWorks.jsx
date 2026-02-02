@@ -144,6 +144,7 @@ const AddWorks = ({ setWorksData }) => {
             </div>
             <div className="flex justify-end gap-3 mt-4">
               <Button
+                name="cancel"
                 sx={{
                   borderColor: "var(--color-primary)",
                   color: "white",
@@ -157,6 +158,7 @@ const AddWorks = ({ setWorksData }) => {
                 Cancel
               </Button>
               <Button
+                name="save"
                 sx={{
                   borderColor: "var(--color-primary)",
                   color: "white",

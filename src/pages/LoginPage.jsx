@@ -154,6 +154,7 @@ const LoginPage = () => {
             className="flex flex-col gap-5"
           >
             <Button
+              name="login"
               type="submit"
               variant="outlined"
               sx={{
