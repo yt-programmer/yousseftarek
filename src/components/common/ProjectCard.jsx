@@ -42,7 +42,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="font-semibold capitalize text-sm text-gray-400"
+          className="font-semibold  mb-5 capitalize text-sm text-gray-400"
         >
           {description ? description : "No description"}
         </motion.p>
@@ -51,7 +51,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
           href={link}
-          className=" mt-5  text-shadow-md text-green-900 "
+          className="absolute bottom-5 text-shadow-md text-green-900 "
         >
           <Button
             variant="outlined"

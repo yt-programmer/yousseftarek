@@ -6,7 +6,7 @@ import ProjectCard from "../common/ProjectCard";
 
 const Works = () => {
   const [page, setPage] = useState(1);
-  const { data, isLoading, error } = useGetProjects(10, page);
+  const { data, isLoading, error } = useGetProjects(5, page);
 
   const onClickHandle = (type) => {
     if (type === "next") {
