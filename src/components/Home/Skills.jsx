@@ -13,11 +13,6 @@ const skills = [
   },
 
   {
-    title: "tools",
-    skills:
-      "vscode , postman, figma , vercel, git , github , framer-motion, react-router , redux , axios, mui , react-icons, emailJs  , npm, wireframe.cc, jsonwebtoken , bcryptjs, dotenv, nodemailer, cloudinary, paymob , cookie-parser , cors,  cloudinary , supabase ",
-  },
-  {
     title: "languages",
     skills: "english , Arabic",
   },

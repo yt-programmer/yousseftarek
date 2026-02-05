@@ -9,10 +9,9 @@ const Home = () => {
   return (
     <section className="relative">
       <Hero />
+      <AboutMe />
       <Projects />
       <Skills />
-
-      <AboutMe />
       <Contacts />
     </section>
   );

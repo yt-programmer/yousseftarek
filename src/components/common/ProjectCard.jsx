@@ -51,7 +51,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
           href={link}
-          className="absolute bottom-4  text-shadow-md text-green-900 "
+          className=" mt-5  text-shadow-md text-green-900 "
         >
           <Button
             variant="outlined"
