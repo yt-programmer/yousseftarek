@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, ScrollRestoration } from "react-router";
 import Header from "../components/Header";
 import InteractiveLinesBg from "../components/InteractiveLinesBg";
 import FirstScreen from "../components/FirstScreen";
@@ -35,6 +35,7 @@ const MainLayout = () => {
           <FirstScreen />
         ) : (
           <>
+            <ScrollRestoration />
             <Header />
             <Outlet />
             <Footer />
