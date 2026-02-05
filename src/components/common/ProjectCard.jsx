@@ -42,7 +42,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="font-semibold  mb-5 capitalize text-sm text-gray-400"
+          className="font-semibold  mb-10 capitalize text-sm text-gray-400"
         >
           {description ? description : "No description"}
         </motion.p>
