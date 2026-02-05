@@ -16,7 +16,10 @@ const ShowWorks = ({ works, setWorksData }) => {
           key={work._id}
         >
           <div className="flex items-center gap-5">
-            <span className="text-[var(--color-primary)]">{i + 1}</span>
+            <span className="text-[var(--color-primary)] hidden md:block">
+              {i + 1}
+            </span>
+
             <img
               src={work.image}
               alt="error img"

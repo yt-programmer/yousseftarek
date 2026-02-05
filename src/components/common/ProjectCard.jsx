@@ -10,7 +10,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
       whileInView={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6 }}
       key={key}
-      className="w-[400px]  min-h-[450px] relative shadow-lg shadow-green-900  rounded-2xl border   border-[var(--color-primary)]"
+      className="w-[400px] flex flex-col  min-h-[450px] relative shadow-lg shadow-green-900  rounded-2xl border   border-[var(--color-primary)]"
     >
       <motion.img
         initial={{ opacity: 0 }}
@@ -19,9 +19,9 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
         loading="lazy"
         src={image}
         alt="error img"
-        className="rounded-t-2xl mb-3 w-full h-[200px]  object-cover"
+        className="rounded-t-2xl w-full ]  object-cover"
       />
-      <div className="p-5">
+      <div className="p-5 flex flex-col flex-1">
         <motion.h3
           initial={{ y: 100, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
@@ -42,7 +42,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="font-semibold  mb-10 capitalize text-sm text-gray-400"
+          className="font-semibold  mb-3 capitalize text-sm text-gray-400"
         >
           {description ? description : "No description"}
         </motion.p>
@@ -51,7 +51,7 @@ const ProjectCard = ({ title, skills, key, description, image, link }) => {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
           href={link}
-          className="absolute bottom-5 text-shadow-md text-green-900 "
+          className=" mt-auto text-shadow-md text-green-900 "
         >
           <Button
             variant="outlined"

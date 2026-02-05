@@ -66,7 +66,7 @@ const EditWorks = ({ work, setWorksData }) => {
             <div className="flex flex-col gap-5">
               {fields.map((field) => (
                 <TextField
-                  key={Date.now() + field}
+                  key={field}
                   label={field}
                   name={field}
                   value={form[field]}
