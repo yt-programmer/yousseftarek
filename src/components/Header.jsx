@@ -65,7 +65,7 @@ const Header = () => {
           )}
         </ul>
         <button
-          className={`relative z-40 md:z-10 md:hidden text-[24px] `}
+          className={`relative z-[666666] md:z-10 md:hidden text-[24px] `}
           onClick={onClickHandle}
         >
           {isOpen ? (
