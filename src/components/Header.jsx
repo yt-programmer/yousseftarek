@@ -91,7 +91,7 @@ const Header = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="md:hidden bg-black/90 fixed z-[666666] flex justify-center pl-6 flex-col gap-32 inset-0 h-screen w-full"
+            className="md:hidden bg-black/90 fixed z-[666666] flex justify-center pl-6 flex-col gap-20 inset-0 h-screen w-full"
           >
             {LINKS.map((link) =>
               link === "testimonials" ? (
