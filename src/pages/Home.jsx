@@ -4,13 +4,15 @@ import Projects from "../components/Home/Projects";
 import Skills from "../components/Home/Skills";
 import AboutMe from "../components/Home/AboutMe";
 import Contacts from "../components/Home/Contacts";
+import Testimonials from "../components/Home/Testimonials";
 
 const Home = () => {
   return (
-    <section className="relative">
+    <section className="relative scroll-smooth">
       <Hero />
       <AboutMe />
       <Projects />
+      <Testimonials />
       <Skills />
       <Contacts />
     </section>

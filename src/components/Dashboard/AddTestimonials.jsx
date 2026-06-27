@@ -1,42 +1,25 @@
-import axios from "axios";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { motion } from "framer-motion";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
+import React from "react";
 
-const AddWorks = ({ refetch }) => {
+import { Button, TextField } from "@mui/material";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useGetTestimonials } from "../../hooks/useGetTestimonials";
+
+const AddTestimonials = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    image: null,
-    title: "",
-    skills: "",
+    name: "",
+    rating: "",
     description: "",
-    link: "",
-    filter: "",
+    position: "",
   });
 
   const handleChange = (e) => {
-    if (e.target.type === "file") {
-      setForm({ ...form, image: e.target.files[0] });
-    } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    }
-  };
-
-  const uploadImage = async () => {
-    const data = new FormData();
-    data.append("file", form.image);
-    data.append("upload_preset", "portfolio");
-
-    const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/dpzhlzcut/image/upload",
-      data,
-    );
-
-    return res.data.secure_url;
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -44,25 +27,21 @@ const AddWorks = ({ refetch }) => {
     setLoading(true);
 
     try {
-      const imageUrl = await uploadImage();
-
       const { data } = await toast.promise(
         axios.post(
-          `${import.meta.env.VITE_API}/api/projects`,
+          `${import.meta.env.VITE_API}/api/testimonials`,
           {
-            title: form.title,
-            skils: form.skills,
+            name: form.name,
+            rating: form.rating,
             description: form.description,
-            link: form.link,
-            image: imageUrl,
-            filter: form.filter,
+            position: form.position,
           },
           { withCredentials: true },
         ),
         {
-          loading: "Adding work ...",
-          success: "Work added successfully",
-          error: "Error adding work",
+          loading: "Adding  testimonial ...",
+          success: "Testimonial added successfully",
+          error: "Error adding testimonial",
         },
       );
 
@@ -77,13 +56,14 @@ const AddWorks = ({ refetch }) => {
     }
   };
 
-  const fields = ["image", "title", "skills", "description", "link", "filter"];
+  const fields = ["name", "rating", "description", "position"];
   return (
     <>
       <Button
         sx={{
           borderColor: "var(--color-primary)",
           color: "white",
+
           "&:hover": {
             borderColor: "var(--color-primary)",
             backgroundColor: "oklch(52.7% 0.154 150.069 / 0.1)",
@@ -92,7 +72,7 @@ const AddWorks = ({ refetch }) => {
         variant="text"
         onClick={() => setOpen(true)}
       >
-        Add work
+        Add Testimonial
       </Button>
 
       {open && (
@@ -104,16 +84,16 @@ const AddWorks = ({ refetch }) => {
             transition={{ duration: 0.4 }}
             className="relative w-[500px] p-5 shadow-lg shadow-green-900 border border-[var(--color-primary)]"
           >
-            <h1 className="text-2xl font-bold mb-5">Add work</h1>
+            <h1 className="text-2xl font-bold mb-5">Add Testimonial</h1>
 
             <div className="flex gap-3 flex-col">
               {fields.map((field) => (
                 <TextField
                   key={field}
                   className="w-full mb-5"
-                  label={field === "image" ? "" : field}
+                  label={field}
                   variant="outlined"
-                  type={field === "image" ? "file" : "text"}
+                  type={"text"}
                   name={field}
                   onChange={handleChange}
                   sx={{
@@ -182,4 +162,4 @@ const AddWorks = ({ refetch }) => {
   );
 };
 
-export default AddWorks;
+export default AddTestimonials;

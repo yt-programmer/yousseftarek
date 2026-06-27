@@ -38,7 +38,11 @@ const Projects = () => {
             className="my-20 flex flex-wrap gap-15  justify-center items-center"
           >
             {isLoading && <Loading />}
-            {error && <ShowAlert type="error" message={`404, ${error}`} />}
+            {error && (
+              <div className="mt-20">
+                <ShowAlert type="error" message={` ${error}`} />
+              </div>
+            )}
             {data && data.length !== 0
               ? data.map((project) => (
                   <>
@@ -53,25 +57,32 @@ const Projects = () => {
                   </>
                 ))
               : !isLoading &&
-                !error && <ShowAlert type="normal" message="No Works" />}
+                !error && (
+                  <div className="mt-20">
+                    <ShowAlert type="normal" message="No Works" />
+                  </div>
+                )}
           </motion.div>
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Link
-              to="/works"
-              className="  flex items-center justify-center  text-shadow-md text-green-900 "
+
+          {!isLoading && !error && data && data.length !== 0 && (
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              <Button
-                variant="outlined"
-                className=" !border-[var(--color-primary)] !text-[var(--color-gray)] !duration-500 !transition-all hover:!text-[var(--color-primary)]"
+              <Link
+                to="/works"
+                className="  flex items-center justify-center  text-shadow-md text-green-900 "
               >
-                View All ~~)
-              </Button>
-            </Link>
-          </motion.div>
+                <Button
+                  variant="outlined"
+                  className=" !border-[var(--color-primary)] !text-[var(--color-gray)] !duration-500 !transition-all hover:!text-[var(--color-primary)]"
+                >
+                  View All ~~)
+                </Button>
+              </Link>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>

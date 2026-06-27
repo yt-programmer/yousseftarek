@@ -5,13 +5,14 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-const EditWorks = ({ work, setWorksData }) => {
+const EditWorks = ({ work, refetch }) => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     title: work.title,
     skils: work.skils,
     description: work.description,
     link: work.link,
+    filter: work.filter,
   });
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +36,7 @@ const EditWorks = ({ work, setWorksData }) => {
           error: "Error updating work",
         },
       );
-      setWorksData(data.data.projects);
+      await refetch();
       setOpen(false);
     } catch (err) {
       toast.error(
@@ -46,7 +47,7 @@ const EditWorks = ({ work, setWorksData }) => {
     }
   };
 
-  const fields = ["title", "skils", "description", "link"];
+  const fields = ["title", "skils", "description", "link", "filter"];
   return (
     <>
       <Button variant="text" onClick={() => setOpen(true)}>

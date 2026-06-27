@@ -5,6 +5,7 @@ import FirstScreen from "../components/FirstScreen";
 import { useEffect, useState } from "react";
 import ToTop from "../components/ToTop";
 import Footer from "../components/Footer";
+import BtnWhatsapp from "../components/BtnWhatsapp";
 
 const MainLayout = () => {
   const [loading, setLoading] = useState(true);
@@ -25,16 +26,16 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <main className="font-display relative min-h-screen text-white">
+    <main className="font-display  relative min-h-screen text-white">
       <InteractiveLinesBg />
-
-      {showToTop && <ToTop />}
 
       <section className="relative z-10">
         {loading ? (
           <FirstScreen />
         ) : (
           <>
+            {showToTop && <ToTop />}
+            <BtnWhatsapp />
             <ScrollRestoration />
             <Header />
             <Outlet />

@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import { MdVerified } from "react-icons/md";
 import { Link } from "react-router";
 import Typewriter from "typewriter-effect";
+
 const Hero = () => {
   return (
-    <section className="relative h-screen pt-[250px] w-full">
+    <section className="relative h-full pt-[250px]  w-full">
       <div className="container mx-auto px-[20px] gap-3 w-full flex md:flex-row flex-col-reverse justify-between items-center">
         <div className="flex flex-col  items-center md:items-start">
           <motion.h2
@@ -43,23 +44,32 @@ const Hero = () => {
             </Link>
           </motion.div>
         </div>
-        <div className="md:mb-0 mb-20 flex flex-col items-center">
-          <motion.img
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            src="/joo.webp"
-            className="max-w-[300px] md:max-w-[400px] rounded-full shadow-2xl"
-            alt="error img"
-            loading="lazy"
-          />
+        <div className="md:mb-0 mb-10 flex flex-col items-center">
+          <motion.div
+            initial={{
+              background: "conic-gradient(#008236 0deg, transparent 0deg)",
+            }}
+            whileInView={{
+              background: "conic-gradient(#008236 360deg, transparent 360deg)",
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="p-1 rounded-full relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]"
+          >
+            <img
+              src="/joo.webp"
+              className=" w-full h-full rounded-full object-cover"
+              alt="error photo"
+              loading="lazy"
+            />
+          </motion.div>
+
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             className="flex mt-3 gap-3 items-center text-2xl text-blue-600"
           >
-            <MdVerified />
+            <MdVerified className="text-[var(--color-primary)]" />
             <span className="text-white text-lg font-bold">
               <Typewriter
                 options={{

@@ -1,71 +1,41 @@
-import axios from "axios";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { motion } from "framer-motion";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
+import React from "react";
 
-const AddWorks = ({ refetch }) => {
+import { Button, TextField } from "@mui/material";
+import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
+
+const EditTestimonials = ({ testimonial, refetch }) => {
   const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({
+    name: testimonial.name,
+    rating: testimonial.rating,
+    description: testimonial.description,
+    position: testimonial.position,
+  });
   const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState({
-    image: null,
-    title: "",
-    skills: "",
-    description: "",
-    link: "",
-    filter: "",
-  });
-
   const handleChange = (e) => {
-    if (e.target.type === "file") {
-      setForm({ ...form, image: e.target.files[0] });
-    } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    }
-  };
-
-  const uploadImage = async () => {
-    const data = new FormData();
-    data.append("file", form.image);
-    data.append("upload_preset", "portfolio");
-
-    const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/dpzhlzcut/image/upload",
-      data,
-    );
-
-    return res.data.secure_url;
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const imageUrl = await uploadImage();
-
       const { data } = await toast.promise(
-        axios.post(
-          `${import.meta.env.VITE_API}/api/projects`,
-          {
-            title: form.title,
-            skils: form.skills,
-            description: form.description,
-            link: form.link,
-            image: imageUrl,
-            filter: form.filter,
-          },
+        axios.patch(
+          `${import.meta.env.VITE_API}/api/testimonials/${testimonial._id}`,
+          form,
           { withCredentials: true },
         ),
         {
-          loading: "Adding work ...",
-          success: "Work added successfully",
-          error: "Error adding work",
+          loading: "Updating testimonial ...",
+          success: "Testimonial updated successfully",
+          error: "Error updating testimonial",
         },
       );
-
       await refetch();
       setOpen(false);
     } catch (err) {
@@ -77,22 +47,11 @@ const AddWorks = ({ refetch }) => {
     }
   };
 
-  const fields = ["image", "title", "skills", "description", "link", "filter"];
+  const fields = ["name", "rating", "description", "position"];
   return (
     <>
-      <Button
-        sx={{
-          borderColor: "var(--color-primary)",
-          color: "white",
-          "&:hover": {
-            borderColor: "var(--color-primary)",
-            backgroundColor: "oklch(52.7% 0.154 150.069 / 0.1)",
-          },
-        }}
-        variant="text"
-        onClick={() => setOpen(true)}
-      >
-        Add work
+      <Button variant="text" onClick={() => setOpen(true)}>
+        Edit
       </Button>
 
       {open && (
@@ -104,18 +63,17 @@ const AddWorks = ({ refetch }) => {
             transition={{ duration: 0.4 }}
             className="relative w-[500px] p-5 shadow-lg shadow-green-900 border border-[var(--color-primary)]"
           >
-            <h1 className="text-2xl font-bold mb-5">Add work</h1>
-
-            <div className="flex gap-3 flex-col">
+            <h1 className="text-2xl font-bold mb-5">Edit Testimonials</h1>
+            <div className="flex flex-col gap-5">
               {fields.map((field) => (
                 <TextField
                   key={field}
-                  className="w-full mb-5"
-                  label={field === "image" ? "" : field}
-                  variant="outlined"
-                  type={field === "image" ? "file" : "text"}
+                  label={field}
                   name={field}
+                  value={form[field]}
                   onChange={handleChange}
+                  className="w-full my-3"
+                  variant="outlined"
                   sx={{
                     "& label": {
                       color: "white",
@@ -144,6 +102,7 @@ const AddWorks = ({ refetch }) => {
                 />
               ))}
             </div>
+
             <div className="flex justify-end gap-3 mt-4">
               <Button
                 name="cancel"
@@ -182,4 +141,4 @@ const AddWorks = ({ refetch }) => {
   );
 };
 
-export default AddWorks;
+export default EditTestimonials;

@@ -5,7 +5,9 @@ import { HiMiniBars3BottomRight } from "react-icons/hi2";
 import { MdClose } from "react-icons/md";
 import { motion } from "framer-motion";
 import { span } from "framer-motion/client";
-const LINKS = ["home", "works", "about-me", "contacts"];
+import { HashLink } from "react-router-hash-link";
+
+const LINKS = ["home", "about-me", "works", "testimonials", "contacts"];
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,25 +27,42 @@ const Header = () => {
           </motion.h1>
         </Link>
         <ul className=" gap-8 hidden md:flex">
-          {LINKS.map((link) => (
-            <NavLink
-              replace
-              key={link}
-              to={link === "home" ? "/" : link}
-              className={({ isActive }) =>
-                `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 hover:text-[var(--color-primary)]  duration-500 transition-all`
-              }
-            >
-              <motion.span
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+          {LINKS.map((link) =>
+            link === "testimonials" ? (
+              <HashLink
+                smooth
+                to="/#testimonials"
+                className="capitalize text-gray-300 hover:text-[var(--color-primary)]"
               >
-                <span className="text-[var(--color-primary)]">#</span>
-                {link}
-              </motion.span>
-            </NavLink>
-          ))}
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1 }}
+                >
+                  <span className="text-[var(--color-primary)]">#</span>
+                  Testimonials
+                </motion.span>
+              </HashLink>
+            ) : (
+              <NavLink
+                replace
+                key={link}
+                to={link === "home" ? "/" : link}
+                className={({ isActive }) =>
+                  `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 hover:text-[var(--color-primary)]  duration-500 transition-all`
+                }
+              >
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 1 }}
+                >
+                  <span className="text-[var(--color-primary)]">#</span>
+                  {link}
+                </motion.span>
+              </NavLink>
+            ),
+          )}
         </ul>
         <button
           className={`relative z-40 md:z-10 md:hidden text-[24px] `}
@@ -74,20 +93,31 @@ const Header = () => {
             transition={{ duration: 0.5 }}
             className="md:hidden bg-black/90 fixed flex justify-center pl-6 flex-col gap-32 inset-0 h-screen w-full"
           >
-            {LINKS.map((link) => (
-              <NavLink
-                replace
-                onClick={() => setTimeout(() => setIsOpen(false), 500)}
-                key={link}
-                to={link === "home" ? "/" : link}
-                className={({ isActive }) =>
-                  `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 font-bold text-3xl hover:text-[var(--color-primary)]  duration-500 transition-all`
-                }
-              >
-                <span className="text-[var(--color-primary)]"># </span>
-                {link}
-              </NavLink>
-            ))}
+            {LINKS.map((link) =>
+              link === "testimonials" ? (
+                <HashLink
+                  smooth
+                  to="/#testimonials"
+                  className="capitalize text-gray-300 hover:text-[var(--color-primary)]"
+                >
+                  <span className="text-[var(--color-primary)]">#</span>
+                  Testimonials
+                </HashLink>
+              ) : (
+                <NavLink
+                  replace
+                  onClick={() => setTimeout(() => setIsOpen(false), 500)}
+                  key={link}
+                  to={link === "home" ? "/" : link}
+                  className={({ isActive }) =>
+                    `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 font-bold text-3xl hover:text-[var(--color-primary)]  duration-500 transition-all`
+                  }
+                >
+                  <span className="text-[var(--color-primary)]"># </span>
+                  {link}
+                </NavLink>
+              ),
+            )}
           </motion.ul>
         )}
       </div>

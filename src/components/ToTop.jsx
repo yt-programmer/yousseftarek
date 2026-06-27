@@ -14,7 +14,7 @@ const onClickHandle = () => {
 const ToTop = () => {
   return (
     <motion.div
-      initial={{ y: -50, opacity: 0 }}
+      initial={{ y: 50, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
       transition={{ duration: 1 }}
       className="fixed bottom-5 z-[2222222222222222] right-5"

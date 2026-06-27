@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-export const useGetProjects = (limit, page, filter = "All") => {
-  const [data, setData] = useState([]);
+
+const useGetTestimonials = (limit, page) => {
+  const [testimonials, setTestimonials] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [filters, setFilters] = useState([]);
   const api = import.meta.env.VITE_API;
   const getData = async () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `${api}/api/projects?${limit && page ? `limit=${limit}&page=${page}` : ""}&filter=${filter}`,
+        `${api}/api/testimonials?${limit && page ? `limit=${limit}&page=${page}` : ""}`,
       );
       if (data.error) {
         setError(data.error);
         return;
       }
-
-      setData(data.data.projects);
-      setFilters(data.data.filters);
+      setTestimonials(data.data.testimonials);
     } catch (err) {
       setError(
         err.response?.data?.message || err.message || "Something went wrong",
@@ -30,13 +28,8 @@ export const useGetProjects = (limit, page, filter = "All") => {
 
   useEffect(() => {
     getData();
-  }, [limit, page, api, filter]);
-
-  return {
-    data,
-    filters,
-    isLoading,
-    error,
-    refetch: getData,
-  };
+  }, [api, limit, page]);
+  return { testimonials, isLoading, error, refetch: getData };
 };
+
+export { useGetTestimonials };

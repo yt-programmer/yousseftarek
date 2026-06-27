@@ -4,17 +4,17 @@ import { tr } from "framer-motion/client";
 import React from "react";
 import toast from "react-hot-toast";
 
-const DeleteWorks = ({ id, refetch }) => {
+const DeleteTestimonials = ({ id, refetch }) => {
   const deleteWork = async () => {
     try {
       const { data } = await toast.promise(
-        axios.delete(`${import.meta.env.VITE_API}/api/projects/${id}`, {
+        axios.delete(`${import.meta.env.VITE_API}/api/testimonials/${id}`, {
           withCredentials: true,
         }),
         {
-          loading: "Deleting work ...",
-          success: "Work deleted successfully",
-          error: "Error deleting work",
+          loading: "Deleting testimonial ...",
+          success: "testimonial deleted successfully",
+          error: "Error deleting testimonial",
         },
       );
 
@@ -34,4 +34,4 @@ const DeleteWorks = ({ id, refetch }) => {
   );
 };
 
-export default DeleteWorks;
+export default DeleteTestimonials;
