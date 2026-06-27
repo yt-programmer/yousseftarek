@@ -97,6 +97,8 @@ const Header = () => {
               link === "testimonials" ? (
                 <HashLink
                   smooth
+                  onClick={() => setTimeout(() => setIsOpen(false), 500)}
+                  key={link}
                   to="/#testimonials"
                   className={`capitalize text-gray-300 font-bold text-3xl hover:text-[var(--color-primary)]  duration-500 transition-all`}
                 >

@@ -75,13 +75,13 @@ export default function Testimonials() {
               <div className="flex ">
                 {testimonials.map((item, index) => (
                   <motion.div key={item._id} className="flex-[0_0_70%] px-4 ">
-                    <div className="shadow-lg  min-h-[200px] shadow-green-900 p-4  rounded-md border   border-[var(--color-primary)]">
+                    <div className="shadow-lg  min-h-[230px] shadow-green-900 p-4  rounded-md border   border-[var(--color-primary)]">
                       <div className=" mb-4">
                         <div className="flex items-center gap-5 justify-between">
                           <h3 className="text-[var(--color-primary)] font-bold  text-lg">
                             {item.name}
                           </h3>
-                          <div className="flex items-center gap-1 mt-2">
+                          <div className="flex items-center gap-1 ">
                             {Array(5)
                               .fill(0)
                               .map((_, starIndex) => (
@@ -102,7 +102,7 @@ export default function Testimonials() {
                           {item.position}
                         </span>
                       </div>
-                      <p className="text-gray-400 font-semibold text-sm mb-4">
+                      <p className="text-gray-400 line-clamp-7 font-semibold text-sm mb-4">
                         {item.description}
                       </p>
                     </div>
