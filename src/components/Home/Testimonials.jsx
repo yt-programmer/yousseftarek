@@ -77,7 +77,7 @@ export default function Testimonials() {
                   <motion.div key={item._id} className="flex-[0_0_70%] px-4 ">
                     <div className="shadow-lg  min-h-[200px] shadow-green-900 p-4  rounded-md border   border-[var(--color-primary)]">
                       <div className=" mb-4">
-                        <div className="flex items-center gap-2 justify-between">
+                        <div className="flex items-center gap-5 justify-between">
                           <h3 className="text-[var(--color-primary)] font-bold  text-lg">
                             {item.name}
                           </h3>

@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useGetTestimonials } from "../../hooks/useGetTestimonials";
 
-const AddTestimonials = () => {
+const AddTestimonials = ({ refetch }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
