@@ -38,7 +38,6 @@ const Header = () => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 1 }}
-                  className={`capitalize text-gray-300 hover:text-[var(--color-primary)]  duration-500 transition-all`}
                 >
                   <span className="text-[var(--color-primary)]">#</span>
                   Testimonials
@@ -92,14 +91,14 @@ const Header = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="md:hidden bg-black/90 fixed flex justify-center pl-6 flex-col gap-32 inset-0 h-screen w-full"
+            className="md:hidden bg-black/90 fixed z-[666666] flex justify-center pl-6 flex-col gap-32 inset-0 h-screen w-full"
           >
             {LINKS.map((link) =>
               link === "testimonials" ? (
                 <HashLink
                   smooth
                   to="/#testimonials"
-                  className="capitalize text-gray-300 hover:text-[var(--color-primary)]"
+                  className={`capitalize text-gray-300 font-bold text-3xl hover:text-[var(--color-primary)]  duration-500 transition-all`}
                 >
                   <span className="text-[var(--color-primary)]">#</span>
                   Testimonials
