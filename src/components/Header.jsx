@@ -38,9 +38,7 @@ const Header = () => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 1 }}
-                  className={({ isActive }) =>
-                    `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 hover:text-[var(--color-primary)]  duration-500 transition-all`
-                  }
+                  className={`capitalize text-gray-300 hover:text-[var(--color-primary)]  duration-500 transition-all`}
                 >
                   <span className="text-[var(--color-primary)]">#</span>
                   Testimonials
