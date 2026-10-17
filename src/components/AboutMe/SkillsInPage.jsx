@@ -1,28 +1,10 @@
 import React from "react";
 import SkillCard from "../common/SkillCard";
-
-const skills = [
-  {
-    title: "frontend",
-    skills: "html , css , javascript , react , tailwind , bootstrap",
-  },
-  {
-    title: "backend",
-    skills: "nodejs , express , mongodb , mongoose  ",
-  },
-
-  {
-    title: "languages",
-    skills: "english , Arabic",
-  },
-  {
-    title: "others",
-    skills:
-      "communication , teamwork , problem solving, time management, learning new things , content creation , ",
-  },
-];
+import { useSiteContent } from "../../context/SiteContentContext";
 
 const SkillsInPage = () => {
+  const { content } = useSiteContent();
+  const skills = content.skills.items || [];
   return (
     <div className="mt-50">
       <h3 className="capitalize text-3xl font-bold mb-10">

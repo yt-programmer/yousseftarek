@@ -1,35 +1,18 @@
 import { motion } from "framer-motion";
 import React from "react";
 import SkillCard from "../common/SkillCard";
+import { useSiteContent } from "../../context/SiteContentContext";
 
-const skills = [
-  {
-    title: "frontend",
-    skills: "html , css , javascript , react , tailwind , bootstrap",
-  },
-  {
-    title: "backend",
-    skills: "nodejs , express , mongodb , mongoose  ",
-  },
-
-  {
-    title: "languages",
-    skills: "english , Arabic",
-  },
-  {
-    title: "others",
-    skills:
-      "communication , teamwork , problem solving, time management, learning new things , content creation , ",
-  },
-];
 const Skills = () => {
+  const { content } = useSiteContent();
+  const skills = content.skills.items || [];
   return (
     <section className="relative mt-50">
       <div className="container flex flex-col md:flex-row  gap-15  mx-auto  px-[20px]">
         <div className="relative md:w-[40%]">
           <div className=" flex items-center gap-5">
             <h2 className="capitalize text-2xl font-bold">
-              <span className="text-[var(--color-primary)]"># </span>Skills
+              <span className="text-[var(--color-primary)]"># </span>{content.skills.title}
             </h2>
             <div className="bg-[var(--color-primary)] h-[1px] flex-1"></div>
           </div>

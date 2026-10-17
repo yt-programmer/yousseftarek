@@ -1,43 +1,10 @@
-import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
-import React from "react";
+import { FaExternalLinkAlt, FaEdit, FaTrash, FaLayerGroup } from "react-icons/fa";
 import DeleteWorks from "./DeleteWorks";
 import EditWorks from "./EditWorks";
-
-const ShowWorks = ({ works, refetch }) => {
-  return (
-    <div className="flex my-10 flex-col gap-5">
-      {works.map((work, i) => (
-        <motion.div
-          initial={{ y: -100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="w-full flex-col md:flex-row shadow-lg shadow-green-900 border   border-[var(--color-primary)] md:h-15 py-3 md:py-0 px-10 rounded-md flex items-center justify-between"
-          key={work._id}
-        >
-          <div className="flex items-center gap-5">
-            <span className="text-[var(--color-primary)] hidden md:block">
-              {i + 1}
-            </span>
-
-            <img
-              src={work.image}
-              alt="error img"
-              className="w-10 h-10 object-cover"
-              loading="lazy"
-            />
-            <h4 className="capitalize font-bold hover:text-[var(--color-primary)]  transition-all duration-500">
-              {work.title}
-            </h4>
-          </div>
-          <div className="flex items-center gap-3">
-            <EditWorks work={work} refetch={refetch} id={work._id} />
-            <DeleteWorks work={work} refetch={refetch} id={work._id} />
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
-};
-
-export default ShowWorks;
+export default function ShowWorks({ works, refetch }) {
+ return <div className="my-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{works.map((work,index)=><motion.article key={work._id} initial={{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:.3,delay:Math.min(index*.04,.2)}} className="group overflow-hidden rounded-xl border border-white/10 bg-[#111318] transition hover:-translate-y-0.5 hover:border-emerald-500/35">
+  <div className="relative flex h-44 items-center justify-center overflow-hidden bg-black/30">{work.image?<img src={work.image} alt={work.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"/>:<FaLayerGroup className="text-3xl text-gray-600"/>}<span className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/70 px-2.5 py-1 text-[10px] uppercase tracking-wide text-emerald-300">{work.filter||"Project"}</span></div>
+  <div className="p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="text-[10px] uppercase tracking-[.18em] text-gray-600">Project {String(index+1).padStart(2,"0")}</p><h3 className="mt-1 truncate text-base font-semibold text-white">{work.title}</h3></div>{work.link&&<a href={work.link} target="_blank" rel="noreferrer" aria-label={`Open ${work.title}`} className="rounded-lg border border-white/10 p-2 text-gray-400 hover:border-emerald-500/40 hover:text-emerald-300"><FaExternalLinkAlt className="text-xs"/></a>}</div><p className="mt-3 line-clamp-3 min-h-[3.75rem] text-xs leading-5 text-gray-400">{work.description}</p>{work.skils&&<p className="mt-3 line-clamp-2 text-[11px] text-gray-500"><span className="text-emerald-400">Stack:</span> {work.skils}</p>}<div className="mt-4 flex items-center gap-2 border-t border-white/5 pt-3"><EditWorks work={work} refetch={refetch}/><DeleteWorks work={work} id={work._id} refetch={refetch}/></div></div>
+ </motion.article>)}</div>;
+}

@@ -1,144 +1,20 @@
 import axios from "axios";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import React, { useState } from "react";
 import toast from "react-hot-toast";
-
-const EditWorks = ({ work, refetch }) => {
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({
-    title: work.title,
-    skils: work.skils,
-    description: work.description,
-    link: work.link,
-    filter: work.filter,
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const { data } = await toast.promise(
-        axios.patch(
-          `${import.meta.env.VITE_API}/api/projects/${work._id}`,
-          form,
-          { withCredentials: true },
-        ),
-        {
-          loading: "Updating work ...",
-          success: "Work updated successfully",
-          error: "Error updating work",
-        },
-      );
-      await refetch();
-      setOpen(false);
-    } catch (err) {
-      toast.error(
-        err.response?.data?.message || err.message || "Something went wrong",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fields = ["title", "skils", "description", "link", "filter"];
-  return (
-    <>
-      <Button variant="text" onClick={() => setOpen(true)}>
-        Edit
-      </Button>
-
-      {open && (
-        <div className="p-5 fixed z-40 flex justify-center items-center top-0 left-0 w-full h-screen bg-black/90">
-          <motion.form
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="relative w-[500px] p-5 shadow-lg shadow-green-900 border border-[var(--color-primary)]"
-          >
-            <h1 className="text-2xl font-bold mb-5">Edit work</h1>
-            <div className="flex flex-col gap-5">
-              {fields.map((field) => (
-                <TextField
-                  key={field}
-                  label={field}
-                  name={field}
-                  value={form[field]}
-                  onChange={handleChange}
-                  className="w-full my-3"
-                  variant="outlined"
-                  sx={{
-                    "& label": {
-                      color: "white",
-                    },
-                    "& label.Mui-focused": {
-                      color: "var(--color-primary)",
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: "var(--color-primary)",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "var(--color-primary)",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "var(--color-primary)",
-                      },
-                    },
-                    "& input": {
-                      color: "white",
-                    },
-                    "& textarea": {
-                      color: "white",
-                    },
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="flex justify-end gap-3 mt-4">
-              <Button
-                name="cancel"
-                sx={{
-                  borderColor: "var(--color-primary)",
-                  color: "white",
-                  "&:hover": {
-                    borderColor: "var(--color-primary)",
-                    backgroundColor: "oklch(52.7% 0.154 150.069 / 0.1)",
-                  },
-                }}
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                name="save"
-                sx={{
-                  borderColor: "var(--color-primary)",
-                  color: "white",
-                  "&:hover": {
-                    borderColor: "var(--color-primary)",
-                    backgroundColor: "oklch(52.7% 0.154 150.069 / 0.1)",
-                  },
-                }}
-                type="submit"
-                disabled={loading}
-              >
-                Save
-              </Button>
-            </div>
-          </motion.form>
-        </div>
-      )}
-    </>
-  );
-};
-
-export default EditWorks;
+import { useEffect } from "react";
+import { FaEdit, FaTimes, FaCloudUploadAlt } from "react-icons/fa";
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "dpzhlzcut";
+const PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "portfolio";
+export default function EditWorks({ work, refetch }) {
+ const [open,setOpen]=useState(false);const [loading,setLoading]=useState(false);const [uploading,setUploading]=useState(false);
+ const [form,setForm]=useState({title:work.title||"",skils:work.skils||"",description:work.description||"",link:work.link||"",filter:work.filter||"",image:work.image||""}); const [categories,setCategories]=useState([]);
+ useEffect(()=>{if(!open)return;let active=true;axios.get(`${import.meta.env.VITE_API}/api/projects?limit=100&page=1&filter=All`).then(({data})=>{if(active)setCategories((data.data?.filters||[]).filter(Boolean));}).catch(()=>{});return()=>{active=false;};},[open]);
+ const change=(e)=>setForm((v)=>({...v,[e.target.name]:e.target.value}));
+ const upload=async(file)=>{if(!file)return;if(!file.type.startsWith("image/")||file.size>8*1024*1024){toast.error("Choose an image smaller than 8 MB");return;}setUploading(true);try{const body=new FormData();body.append("file",file);body.append("upload_preset",PRESET);const result=await axios.post(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,body);setForm((v)=>({...v,image:result.data.secure_url}));toast.success("Image uploaded");}catch(error){toast.error(error.response?.data?.error?.message||"Image upload failed. Check Cloudinary settings.");}finally{setUploading(false);}};
+ const submit=async(e)=>{e.preventDefault();setLoading(true);try{await toast.promise(axios.patch(`${import.meta.env.VITE_API}/api/projects/${work._id}`,form,{withCredentials:true}),{loading:"Saving project…",success:"Project updated",error:"Could not update project"});await refetch();setOpen(false);}catch(error){toast.error(error.response?.data?.message||error.message||"Something went wrong");}finally{setLoading(false);}};
+ const fields=[{key:"title",label:"Project name"},{key:"skils",label:"Technologies"},{key:"link",label:"Project URL"},];
+ return <><button onClick={()=>setOpen(true)} className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-gray-300 transition hover:border-emerald-500/40 hover:text-emerald-300"><FaEdit/> Edit project</button>{open&&<div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm"><motion.form onSubmit={submit} initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} className="my-auto max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#111318] p-5 shadow-2xl md:p-7"><div className="mb-6 flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.2em] text-emerald-400">Portfolio content</p><h2 className="mt-2 text-2xl font-semibold">Edit project</h2><p className="mt-1 text-sm text-gray-400">Update project details and cover image.</p></div><button type="button" onClick={()=>setOpen(false)} className="rounded-lg border border-white/10 p-2 text-gray-400 hover:text-white"><FaTimes/></button></div>
+ <label className="mb-2 block text-sm text-gray-300">Project cover</label><div className="mb-5 rounded-xl border border-dashed border-emerald-500/30 bg-black/20 p-3">{form.image&&<img src={form.image} alt="Project preview" className="mb-3 max-h-48 w-full rounded-lg object-contain"/>}<label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/10 px-3 py-3 text-sm text-gray-300 hover:bg-white/5"><FaCloudUploadAlt className="text-emerald-300"/>{uploading?"Uploading image…":"Choose replacement image"}<input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e)=>upload(e.target.files?.[0])}/></label></div>
+ <div className="grid gap-4 md:grid-cols-2">{fields.map((field)=><label key={field.key}><span className="mb-1.5 block text-xs text-gray-400">{field.label}</span><input required name={field.key} value={form[field.key]} onChange={change} className="w-full rounded-lg border border-white/10 bg-[#090a0d] px-3 py-3 text-sm text-white outline-none focus:border-emerald-500"/></label>)}</div><label key="filter" className="block"><span className="mb-1.5 block text-xs text-gray-400">Category</span><input required name="filter" list="project-category-options" value={form.filter} onChange={change} placeholder="Choose existing or type a new category" className="w-full rounded-lg border border-white/10 bg-[#090a0d] px-3 py-3 text-sm text-white outline-none transition focus:border-emerald-500"/><datalist id="project-category-options">{categories.map((category)=><option key={category} value={category}/>)}</datalist><span className="mt-1 block text-[11px] text-gray-500">Choose a saved category or type a new one.</span></label><label className="mt-4 block"><span className="mb-1.5 block text-xs text-gray-400">Description</span><textarea required rows={4} name="description" value={form.description} onChange={change} className="w-full resize-y rounded-lg border border-white/10 bg-[#090a0d] px-3 py-3 text-sm leading-6 text-white outline-none focus:border-emerald-500"/></label><div className="mt-6 flex justify-end gap-3 border-t border-white/10 pt-5"><button type="button" onClick={()=>setOpen(false)} className="rounded-lg border border-white/10 px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5">Cancel</button><button disabled={loading||uploading} className="rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold disabled:opacity-50">{loading?"Saving…":"Save changes"}</button></div></motion.form></div>}</>;
+}

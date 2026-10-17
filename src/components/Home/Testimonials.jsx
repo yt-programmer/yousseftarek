@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import useEmblaCarousel from "embla-carousel-react";
-import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaStar, FaExternalLinkAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useGetTestimonials } from "../../hooks/useGetTestimonials";
 import Loading from "../Loading";
 import ShowAlert from "../ShowAlert";
+import { useSiteContent } from "../../context/SiteContentContext";
 
 export default function Testimonials() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -14,6 +16,7 @@ export default function Testimonials() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState([]);
   const { testimonials, isLoading, error } = useGetTestimonials();
+  const { content } = useSiteContent();
 
   useEffect(() => {
     if (!emblaApi || !testimonials?.length) return;
@@ -42,9 +45,10 @@ export default function Testimonials() {
       <div className="container flex flex-col px-[20px] mx-auto">
         <div className="relative flex items-center md:w-[60%] gap-5">
           <h2 className="capitalize text-2xl font-bold">
-            <span className="text-[var(--color-primary)]"># </span>Testimonials
+            <span className="text-[var(--color-primary)]"># </span>{content.testimonials.title}
           </h2>
           <div className="bg-[var(--color-primary)] h-[1px] flex-1"></div>
+          <Link to="/testimonials" className="shrink-0 text-xs font-semibold text-[var(--color-primary)] transition hover:underline">{content.testimonials.viewAllText || "View all testimonials"} ↗</Link>
         </div>
 
         {isLoading && <Loading />}
@@ -74,7 +78,7 @@ export default function Testimonials() {
             <div className="overflow-hidden  mt-5" ref={emblaRef}>
               <div className="flex ">
                 {testimonials.map((item, index) => (
-                  <motion.div key={item._id} className="flex-[0_0_70%] px-4 ">
+                  <motion.div key={item._id} initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45, delay: Math.min(index * 0.08, 0.3) }} whileHover={{ y: -4 }} className="flex-[0_0_70%] px-4 ">
                     <div className="shadow-lg  min-h-[230px] shadow-green-900 p-4  rounded-md border   border-[var(--color-primary)]">
                       <div className=" mb-4">
                         <div className="flex items-center gap-5 justify-between">
@@ -105,6 +109,7 @@ export default function Testimonials() {
                       <p className="text-gray-400 line-clamp-7 font-semibold text-sm mb-4">
                         {item.description}
                       </p>
+                      {item.website && <a href={item.website} target="_blank" rel="noopener noreferrer" className="inline-flex max-w-full items-center gap-2 rounded-full border border-[var(--color-primary)]/40 px-3 py-2 text-xs text-[var(--color-primary)] transition hover:bg-[var(--color-primary)]/10"><FaExternalLinkAlt className="shrink-0" /><span className="truncate">{content.testimonials.websiteLinkText || "Visit website"}</span></a>}
                     </div>
                   </motion.div>
                 ))}
@@ -129,10 +134,14 @@ export default function Testimonials() {
           !isLoading &&
           !error && (
             <div className="mt-20">
-              <ShowAlert type="normal" message="No Testimonials" />
+              <ShowAlert type="normal" message={content.testimonials.emptyText} />
             </div>
           )
         )}
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link to="/testimonials" className="rounded-lg border border-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-[var(--color-primary)] transition hover:bg-[var(--color-primary)]/10">{content.testimonials.viewAllText || "View all testimonials"}</Link>
+          <Link to="/testimonials#leave-review" className="rounded-lg bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90">{content.testimonials.addReviewText || "Leave a review"}</Link>
+        </div>
       </div>
     </section>
   );

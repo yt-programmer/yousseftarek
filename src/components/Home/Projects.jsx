@@ -8,16 +8,19 @@ import Loading from "../Loading";
 
 import ShowAlert from "../ShowAlert";
 import Button from "@mui/material/Button";
+import { useSiteContent } from "../../context/SiteContentContext";
 
 const Projects = () => {
   const { data, isLoading, error } = useGetProjects(3, 1);
+  const { content } = useSiteContent();
+  const projectContent = content.projects;
 
   return (
     <section className="relative mt-50">
       <div className="container px-[20px] mx-auto">
         <div className="flex items-center gap-5">
           <h2 className="capitalize text-2xl font-bold">
-            <span className="text-[var(--color-primary)]"># </span>Works
+            <span className="text-[var(--color-primary)]"># </span>{projectContent.homeTitle}
           </h2>
 
           <div className="flex-1 bg-[var(--color-primary)] h-[1px]"></div>
@@ -26,7 +29,7 @@ const Projects = () => {
             to="/works"
             className="md:ml-[300px] ml-[20px] hover:text-[var(--color-primary)]   font-semibold text-sm transition-all duration-500"
           >
-            View All ~~)
+            {projectContent.viewAllText}
           </Link>
         </div>
 
@@ -59,7 +62,7 @@ const Projects = () => {
               : !isLoading &&
                 !error && (
                   <div className="mt-20">
-                    <ShowAlert type="normal" message="No Works" />
+                    <ShowAlert type="normal" message={projectContent.emptyText} />
                   </div>
                 )}
           </motion.div>
@@ -78,7 +81,7 @@ const Projects = () => {
                   variant="outlined"
                   className=" !border-[var(--color-primary)] !text-[var(--color-gray)] !duration-500 !transition-all hover:!text-[var(--color-primary)]"
                 >
-                  View All ~~)
+                  {projectContent.viewAllText}
                 </Button>
               </Link>
             </motion.div>

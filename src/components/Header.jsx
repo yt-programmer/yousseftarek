@@ -6,10 +6,18 @@ import { MdClose } from "react-icons/md";
 import { motion } from "framer-motion";
 import { span } from "framer-motion/client";
 import { HashLink } from "react-router-hash-link";
+import { useSiteContent } from "../context/SiteContentContext";
 
-const LINKS = ["home", "about-me", "works", "testimonials", "contacts"];
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { content } = useSiteContent();
+  const LINKS = [
+    { key: "home", label: content.navigation.home, to: "/" },
+    { key: "about-me", label: content.navigation.about, to: "/about-me" },
+    { key: "works", label: content.navigation.works, to: "/works" },
+    { key: "testimonials-page", label: content.navigation.testimonials, to: "/testimonials" },
+    { key: "contacts", label: content.navigation.contacts, to: "/contacts" },
+  ];
 
   const onClickHandle = () => {
     setIsOpen((prev) => !prev);
@@ -23,14 +31,15 @@ const Header = () => {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            YOUSSEF TAREK
+            {content.site.name}
           </motion.h1>
         </Link>
         <ul className=" gap-8 hidden md:flex">
           {LINKS.map((link) =>
-            link === "testimonials" ? (
+            link.key === "testimonials" ? (
               <HashLink
                 smooth
+                key={link.key}
                 to="/#testimonials"
                 className="capitalize text-gray-300 hover:text-[var(--color-primary)]"
               >
@@ -40,14 +49,14 @@ const Header = () => {
                   transition={{ duration: 1 }}
                 >
                   <span className="text-[var(--color-primary)]">#</span>
-                  Testimonials
+                  {link.label}
                 </motion.span>
               </HashLink>
             ) : (
               <NavLink
                 replace
-                key={link}
-                to={link === "home" ? "/" : link}
+                key={link.key}
+                to={link.to}
                 className={({ isActive }) =>
                   `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 hover:text-[var(--color-primary)]  duration-500 transition-all`
                 }
@@ -58,7 +67,7 @@ const Header = () => {
                   transition={{ duration: 1 }}
                 >
                   <span className="text-[var(--color-primary)]">#</span>
-                  {link}
+                  {link.label}
                 </motion.span>
               </NavLink>
             ),
@@ -94,29 +103,29 @@ const Header = () => {
             className="md:hidden bg-black/90 fixed z-[666666] flex justify-center pl-6 flex-col gap-20 inset-0 h-screen w-full"
           >
             {LINKS.map((link) =>
-              link === "testimonials" ? (
+              link.key === "testimonials" ? (
                 <HashLink
                   smooth
                   onClick={() => setTimeout(() => setIsOpen(false), 500)}
-                  key={link}
+                  key={link.key}
                   to="/#testimonials"
                   className={`capitalize text-gray-300 font-bold text-3xl hover:text-[var(--color-primary)]  duration-500 transition-all`}
                 >
                   <span className="text-[var(--color-primary)]">#</span>
-                  Testimonials
+                  {link.label}
                 </HashLink>
               ) : (
                 <NavLink
                   replace
                   onClick={() => setTimeout(() => setIsOpen(false), 500)}
-                  key={link}
-                  to={link === "home" ? "/" : link}
+                  key={link.key}
+                  to={link.to}
                   className={({ isActive }) =>
                     `${isActive ? " !text-[var(--color-primary)] " : ""}capitalize text-gray-300 font-bold text-3xl hover:text-[var(--color-primary)]  duration-500 transition-all`
                   }
                 >
                   <span className="text-[var(--color-primary)]"># </span>
-                  {link}
+                  {link.label}
                 </NavLink>
               ),
             )}

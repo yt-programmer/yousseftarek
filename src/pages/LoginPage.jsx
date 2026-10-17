@@ -2,177 +2,84 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { motion } from "framer-motion";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import { FaLock, FaUserShield } from "react-icons/fa";
+
+const fieldSx = {
+  "& label": { color: "#9ca3af" },
+  "& label.Mui-focused": { color: "var(--color-primary)" },
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "12px", backgroundColor: "rgba(0,0,0,.22)", color: "white",
+    "& fieldset": { borderColor: "color-mix(in srgb, var(--color-primary) 45%, transparent)" },
+    "&:hover fieldset": { borderColor: "var(--color-primary)" },
+    "&.Mui-focused fieldset": { borderColor: "var(--color-primary)" },
+  },
+  "& input": { color: "white", padding: "14px 14px" },
+};
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    const me = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_API}/api/auth/me`,
-          { withCredentials: true },
-        );
+    let active = true;
+    axios.get(`${import.meta.env.VITE_API}/api/auth/me`, { withCredentials: true })
+      .then(() => { if (active) navigate("/dashboard", { replace: true }); })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [navigate]);
 
-        navigate("/dashboard", { replace: true });
-      } catch (err) {}
-    };
-
-    me();
-  }, []);
-
-  const onSubmitHandle = async (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
+  const onSubmitHandle = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    setSubmitting(true);
     try {
-      const { data } = await toast.promise(
+      await toast.promise(
         axios.post(
           `${import.meta.env.VITE_API}/api/auth/login`,
           { email, password },
-          { withCredentials: true },
+          { withCredentials: true, timeout: 15000 },
         ),
         {
-          loading: "Loading...",
-          success: "Login successfully!",
-          error: "Login failed!",
+          loading: "Signing in…",
+          success: "Login successful",
+          error: (error) => {
+            if (error.response?.status === 429) {
+              return error.response?.data?.message || "Too many login attempts. Try again later.";
+            }
+            if (error.response?.status === 401) return "Email or password is incorrect";
+            if (error.code === "ECONNABORTED") return "The request timed out. Please try again.";
+            return "Unable to sign in. Please check the connection and try again.";
+          },
         },
       );
-
+      form.reset();
       navigate("/dashboard", { replace: true });
-    } catch (err) {
-      toast.error(
-        err.response?.data?.message || err.message || "Something went wrong",
-      );
+    } catch {
+      // toast.promise already displays the safe, user-facing error message.
     } finally {
-      e.target.reset();
+      setSubmitting(false);
     }
   };
-  return (
-    <section className="pt-50 min-h-screen">
-      <div className="container mx-auto px-[20px] ">
-        <div>
-          <h2 className="text-3xl font-semibold">
-            <span className="text-[var(--color-primary)]">/</span>login to
-            dashboard
-          </h2>
-          <p className="text-gray-400 mt-5">Login to your account</p>
-        </div>
-        <form
-          onSubmit={(e) => onSubmitHandle(e)}
-          className="mt-50 shadow-lg shadow-green-900  rounded-2xl border   border-[var(--color-primary)] p-10 md:w-[500px] mx-auto  flex flex-col gap-10"
-        >
-          <h3 className="text-2xl text-[var(--color-primary)] font-semibold">
-            Login
-          </h3>
-          <motion.div
-            initial={{ y: -100, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col gap-5"
-          >
-            <TextField
-              required
-              sx={{
-                "& label": {
-                  color: "white",
-                },
-                "& label.Mui-focused": {
-                  color: "var(--color-primary)",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "var(--color-primary)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "var(--color-primary)",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "var(--color-primary)",
-                  },
-                },
-                "& input": {
-                  color: "white",
-                },
-                "& textarea": {
-                  color: "white",
-                },
-              }}
-              label="Email"
-              type="email"
-              variant="outlined"
-              name="email"
-            />
-          </motion.div>
-          <motion.div
-            initial={{ y: -100, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col gap-5"
-          >
-            <TextField
-              required
-              sx={{
-                "& label": {
-                  color: "white",
-                },
-                "& label.Mui-focused": {
-                  color: "var(--color-primary)",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "var(--color-primary)",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "var(--color-primary)",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "var(--color-primary)",
-                  },
-                },
-                "& input": {
-                  color: "white",
-                },
-                "& textarea": {
-                  color: "white",
-                },
-              }}
-              label="Password"
-              variant="outlined"
-              type="password"
-              name="password"
-            />
-          </motion.div>
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col gap-5"
-          >
-            <Button
-              name="login"
-              type="submit"
-              variant="outlined"
-              sx={{
-                borderColor: "var(--color-primary)",
-                color: "white",
-                "&:hover": {
-                  borderColor: "var(--color-primary)",
-                  backgroundColor: "oklch(52.7% 0.154 150.069 / 0.1)",
-                },
-              }}
-            >
-              Send
-            </Button>
-          </motion.div>
-        </form>
-      </div>
-    </section>
-  );
-};
 
+  return <section className="relative flex w-full min-w-0 min-h-[calc(100vh-80px)] items-center justify-center px-4 py-10 sm:px-6 sm:py-16">
+    <div className="w-full max-w-md min-w-0">
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35 }} className="mb-6 text-center">
+        <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--color-primary)]/50 bg-[var(--color-primary)]/10 text-2xl text-[var(--color-primary)]"><FaUserShield /></span>
+        <h2 className="text-2xl font-bold sm:text-3xl"><span className="text-[var(--color-primary)]">/</span> Login to dashboard</h2>
+        <p className="mt-3 text-sm text-gray-400">Sign in to manage your portfolio content.</p>
+      </motion.div>
+      <motion.form initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .4, delay: .06 }} onSubmit={onSubmitHandle} className="flex w-full min-w-0 flex-col gap-5 rounded-2xl border border-[var(--color-primary)]/60 bg-black/25 p-5 shadow-xl shadow-green-950/30 sm:p-8">
+        <div><h3 className="text-xl font-semibold text-[var(--color-primary)]">Welcome back</h3><p className="mt-1 text-xs text-gray-500">Use your administrator credentials.</p></div>
+        <TextField required fullWidth name="email" label="Email address" type="email" autoComplete="username" inputProps={{ maxLength: 254, autoCapitalize: "none", spellCheck: false }} sx={fieldSx} />
+        <TextField required fullWidth name="password" label="Password" type="password" autoComplete="current-password" inputProps={{ maxLength: 128 }} sx={fieldSx} />
+        <Button type="submit" disabled={submitting} variant="outlined" startIcon={<FaLock />} sx={{ mt: 1, py: 1.4, borderRadius: "12px", borderColor: "var(--color-primary)", color: "white", fontWeight: 600, textTransform: "none", "&:hover": { borderColor: "var(--color-primary)", backgroundColor: "color-mix(in srgb, var(--color-primary) 12%, transparent)" }, "&.Mui-disabled": { color: "#6b7280", borderColor: "#374151" } }}>{submitting ? "Signing in…" : "Sign in"}</Button>
+      </motion.form>
+    </div>
+  </section>;
+};
 export default LoginPage;

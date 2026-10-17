@@ -1,68 +1,28 @@
 import React from "react";
-
 import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
-const ProjectCard = ({ title, skills, key, description, image, link }) => {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.1 }}
-      initial={{ opacity: 0, x: -100 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6 }}
-      key={key}
-      className="w-[400px] flex flex-col  min-h-[450px] relative shadow-lg shadow-green-900  rounded-2xl border   border-[var(--color-primary)]"
-    >
-      <motion.img
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        loading="lazy"
-        src={image}
-        alt="error img"
-        className="rounded-t-2xl w-full ]  object-cover"
-      />
-      <div className="p-5 flex flex-col flex-1">
-        <motion.h3
-          initial={{ y: 100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1 }}
-          className="capitalize border-b pb-2 mb-4 text-gray-400  border-[var(--color-primary)]"
-        >
-          {skills ? skills : "No skills"}
-        </motion.h3>
-        <motion.h2
-          initial={{ y: -100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="font-bold text-2xl mb-2 capitalize"
-        >
-          {title ? title : "No Title"}
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="font-semibold  mb-3 capitalize text-sm text-gray-400"
-        >
-          {description ? description : "No description"}
-        </motion.p>
-        <motion.a
-          initial={{ y: -100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          href={link}
-          className=" mt-auto text-shadow-md text-green-900 "
-        >
-          <Button
-            variant="outlined"
-            className=" !border-[var(--color-primary)] !text-[var(--color-gray)] !duration-500 !transition-all hover:!text-[var(--color-primary)]"
-          >
-            Live (~)
-          </Button>
-        </motion.a>
-      </div>
-    </motion.div>
-  );
-};
+import { FaExternalLinkAlt, FaCode } from "react-icons/fa";
+
+const ProjectCard = ({ title, skills, description, image, link }) => (
+  <motion.article
+    initial={{ opacity: 0, y: 18 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.12 }}
+    whileHover={{ y: -5 }}
+    transition={{ duration: 0.3 }}
+    className="group flex w-full max-w-[400px] min-w-0 flex-col overflow-hidden rounded-2xl border border-[var(--color-primary)]/60 bg-black/25 shadow-lg shadow-green-950/30 transition-colors duration-300 hover:border-[var(--color-primary)]"
+  >
+    <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/30">
+      {image ? <motion.img src={image} alt={title || "Project preview"} loading="lazy" whileHover={{ scale: 1.04 }} transition={{ duration: 0.45 }} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-4xl text-[var(--color-primary)]"><FaCode /></div>}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
+    </div>
+    <div className="flex flex-1 flex-col p-5 sm:p-6">
+      <p className="mb-3 line-clamp-2 min-h-10 border-b border-[var(--color-primary)]/30 pb-3 text-xs leading-5 text-gray-400">{skills || "Technologies not specified"}</p>
+      <h2 className="mb-2 line-clamp-2 text-xl font-bold capitalize text-white sm:text-2xl">{title || "Untitled project"}</h2>
+      <p className="mb-5 line-clamp-4 flex-1 text-sm leading-6 text-gray-400">{description || "No description available."}</p>
+      {link && <a href={link} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex w-fit" aria-label={`Open ${title || "project"}`}><Button variant="outlined" endIcon={<FaExternalLinkAlt className="!text-xs" />} className="!rounded-full !border-[var(--color-primary)] !px-5 !py-2 !text-[var(--color-gray)] !transition-all hover:!bg-[var(--color-primary)]/10 hover:!text-[var(--color-primary)]">Live demo</Button></a>}
+    </div>
+  </motion.article>
+);
 
 export default ProjectCard;

@@ -3,8 +3,11 @@ import { motion } from "framer-motion";
 import { MdVerified } from "react-icons/md";
 import { Link } from "react-router";
 import Typewriter from "typewriter-effect";
+import { useSiteContent } from "../../context/SiteContentContext";
 
 const Hero = () => {
+  const { content } = useSiteContent();
+  const hero = content.hero;
   return (
     <section className="relative h-full pt-[250px]  w-full">
       <div className="container mx-auto px-[20px] gap-3 w-full flex md:flex-row flex-col-reverse justify-between items-center">
@@ -15,9 +18,9 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl  md:text-start font-extrabold text-center"
           >
-            Hi I'm Youssef Tarek{" "}
+            {hero.title}{" "}
             <span className="text-[var(--color-primary)]">
-              MERN Stack Developer
+              {hero.role}
             </span>
           </motion.h2>
           <motion.p
@@ -26,8 +29,7 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
             className="text-center md:text-start text-gray-400 mt-10 font-semibold text-sm"
           >
-            Building modern web experiences and Turning ideas into interactive
-            web apps
+            {hero.description}
           </motion.p>
           <motion.div
             initial={{ y: 100, opacity: 0 }}
@@ -39,7 +41,7 @@ const Hero = () => {
                 variant="outlined"
                 className="!mt-5 !relative !border-[var(--color-primary)] !text-[var(--color-primary)]"
               >
-                View My Works
+                {hero.buttonText}
               </Button>
             </Link>
           </motion.div>
@@ -56,9 +58,9 @@ const Hero = () => {
             className="p-1 rounded-full relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]"
           >
             <img
-              src="/joo.webp"
+              src={hero.photoUrl || "/joo.webp"}
               className=" w-full h-full rounded-full object-cover"
-              alt="error photo"
+              alt={hero.photoAlt || "Youssef Tarek"}
               loading="lazy"
             />
           </motion.div>
@@ -73,7 +75,7 @@ const Hero = () => {
             <span className="text-white text-lg font-bold">
               <Typewriter
                 options={{
-                  strings: ["Verified"],
+                  strings: [hero.verifiedText || "Verified"],
                   autoStart: true,
                   loop: true,
                 }}
