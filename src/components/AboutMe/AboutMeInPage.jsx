@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import React from "react";
-import aboutMe from "../../assets/about-me.webp";
 import { useSiteContent } from "../../context/SiteContentContext";
 const AboutMeInPage = () => {
   const { content } = useSiteContent();
@@ -23,15 +22,15 @@ const AboutMeInPage = () => {
             </motion.p>
           </div>
           <div className="">
-            <motion.img
+            {content.aboutPage.imageUrl ? <motion.img
               initial={{ opacity: 0, x: 100 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 3 }}
-              src={content.aboutPage.imageUrl || aboutMe}
+              src={content.aboutPage.imageUrl}
               loading="lazy"
               className="max-w-[300px] ml-15 md:ml-0"
-              alt={content.aboutPage.imageAlt || "Youssef Tarek about me"}
-            />
+              alt="Youssef Tarek about me"
+            /> : null}
           </div>
         </div>
       </div>

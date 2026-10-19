@@ -60,7 +60,6 @@ const LoginPage = () => {
       form.reset();
       navigate("/dashboard", { replace: true });
     } catch {
-      // toast.promise already displays the safe, user-facing error message.
     } finally {
       setSubmitting(false);
     }

@@ -19,14 +19,13 @@ const defaults = {
     "role": "MERN Stack Developer",
     "description": "Building modern web experiences and Turning ideas into interactive web apps",
     "buttonText": "View My Works",
-    "photoUrl": "/joo.webp",
-    "photoAlt": "Youssef Tarek - MERN Stack Developer",
+    "photoUrl": "",
     "verifiedText": "Verified"
   },
   "homeAbout": {
     "title": "about me",
     "description": "Welcome to my portfolio! I’m Youssef Tarek, a passionate and creative web developer based in Cairo, Egypt. I focus on building modern, responsive, and user-friendly websites. I believe in turning ideas into powerful digital experiences using the latest technologies. My goal is to deliver smart and efficient web solutions that help businesses and individuals grow online. Through continuous learning and hands-on projects, I’m always improving and committed to providing high-quality results.",
-    "imageAlt": "About Youssef Tarek",
+
     "imageUrl": "",
     "readMoreText": "Read More ~~)"
   },
@@ -34,7 +33,7 @@ const defaults = {
     "title": "about Me",
     "subtitle": "Who am I ?",
     "description": "Welcome to my portfolio. My name is Youssef Tarek, a web developer based in Cairo, Egypt, with a strong focus on building modern, scalable, and high-quality web applications. I work primarily with the MERN Stack, developing responsive and interactive front-end interfaces using React and Tailwind CSS, while building reliable and efficient back-end systems with Node.js, Express, and MongoDB. I believe that web development is more than just writing code—it is about solving real problems and transforming ideas into functional, well-designed digital products. For this reason, I pay close attention to clean code, performance, user experience, and overall application structure in every project I build. Throughout my journey, I have worked on multiple hands-on projects that helped me strengthen my technical skills and gain a deeper understanding of full-stack development, from planning and development to deployment. I am constantly learning and exploring new technologies to improve my workflow and deliver better results. My goal is to continue building impactful digital solutions that provide real value to users and businesses, while consistently growing as a developer and maintaining a high standard of quality in everything I create.",
-    "imageAlt": "Youssef Tarek about me",
+
     "imageUrl": ""
   },
   "projects": {
@@ -143,9 +142,15 @@ export const SiteContentProvider = ({ children }) => {
   const refresh = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API}/api/site-content`);
-      if (response.data?.data?.content) setContent((current) => ({ ...current, ...response.data.data.content }));
+      if (response.data?.data?.content) {
+        const remote = response.data.data.content;
+        setContent((current) => ({
+          ...current,
+          ...remote,
+          hero: { ...defaults.hero, ...(current.hero || {}), ...(remote.hero || {}) },
+        }));
+      }
     } catch (error) {
-      // Keep the built-in defaults available if the API is temporarily offline.
     } finally { setLoading(false); }
   };
   useEffect(() => { refresh(); }, []);

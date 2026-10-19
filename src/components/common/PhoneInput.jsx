@@ -17,8 +17,6 @@ const FALLBACK_COUNTRIES = [
 const toCountry = (country) => {
   const root = country.idd?.root || "";
   const suffixes = country.idd?.suffixes || [];
-  // Multiple suffixes commonly represent regional area codes (e.g. NANP);
-  // the shared international calling code is the root itself.
   const suffix = suffixes.length === 1 ? suffixes[0] : "";
   const dial = `${root}${suffix}`;
   if (!country.cca2 || !dial || dial === "+") return null;
@@ -33,13 +31,34 @@ export default function PhoneInput({ name, label, required = false, defaultValue
 
   useEffect(() => {
     let active = true;
-    fetch("https://restcountries.com/v3.1/all?fields=name,cca2,idd,flag")
-      .then((response) => { if (!response.ok) throw new Error("Country list unavailable"); return response.json(); })
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    fetch("https://cdn.jsdelivr.net/npm/world-countries@5.1.0/countries.json", {
+      signal: controller.signal,
+      headers: { Accept: "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Country list request failed (${response.status})`);
+        return response.json();
+      })
       .then((items) => {
-        const parsed = items.map(toCountry).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
-        if (active && parsed.length) setCountries(parsed);
-      }).catch(() => {});
-    return () => { active = false; };
+        if (!Array.isArray(items)) throw new Error("Country list response was invalid");
+        const parsed = items.map((country) => {
+          if (country.cca2 && Array.isArray(country.callingCodes) && country.callingCodes.length) {
+            const dial = country.callingCodes[0];
+            return dial ? { name: country.name?.common || country.cca2, code: country.cca2, dial, flag: country.flag || "🌐" } : null;
+          }
+          return toCountry(country);
+        }).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
+        if (active && parsed.length) {
+          const unique = [...new Map(parsed.map((country) => [country.code, country])).values()];
+          setCountries(unique);
+          setCountryCode((current) => unique.some((country) => country.code === current) ? current : (unique.some((country) => country.code === "EG") ? "EG" : unique[0].code));
+        }
+      })
+      .catch(() => {})
+      .finally(() => clearTimeout(timeout));
+    return () => { active = false; clearTimeout(timeout); controller.abort(); };
   }, []);
 
   useEffect(() => {

@@ -60,8 +60,9 @@ const Hero = () => {
             <img
               src={hero.photoUrl || "/joo.webp"}
               className=" w-full h-full rounded-full object-cover"
-              alt={hero.photoAlt || "Youssef Tarek"}
-              loading="lazy"
+              alt="Youssef Tarek"
+              loading="eager"
+              fetchPriority="high"
             />
           </motion.div>
 

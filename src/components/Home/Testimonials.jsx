@@ -19,23 +19,20 @@ export default function Testimonials() {
   const { content } = useSiteContent();
 
   useEffect(() => {
-    if (!emblaApi || !testimonials?.length) return;
-
-    const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    };
-
+    if (!emblaApi) return;
     emblaApi.reInit();
-    setScrollSnaps(emblaApi.scrollSnapList());
-
-    onSelect();
-
-    emblaApi.on("select", onSelect);
-
-    return () => {
-      emblaApi.off("select", onSelect);
+    const syncCarousel = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+      setScrollSnaps(emblaApi.scrollSnapList());
     };
-  }, [emblaApi]);
+    syncCarousel();
+    emblaApi.on("select", syncCarousel);
+    emblaApi.on("reInit", syncCarousel);
+    return () => {
+      emblaApi.off("select", syncCarousel);
+      emblaApi.off("reInit", syncCarousel);
+    };
+  }, [emblaApi, testimonials?.length]);
 
   return (
     <section
@@ -61,6 +58,8 @@ export default function Testimonials() {
           <div className="mt-20   relative">
             <>
               <motion.button
+                type="button"
+                aria-label="Previous testimonial"
                 onClick={() => emblaApi?.scrollPrev()}
                 className="absolute left-0 top-1/2 -translate-y-1/2 z-50 h-12 w-12 rounded-full pr-1 bg-[var(--color-primary)] shadow-lg flex items-center justify-center"
               >
@@ -68,6 +67,8 @@ export default function Testimonials() {
               </motion.button>
 
               <motion.button
+                type="button"
+                aria-label="Next testimonial"
                 onClick={() => emblaApi?.scrollNext()}
                 className="absolute right-0 top-1/2 -translate-y-1/2 z-50 h-12 w-12 rounded-full pl-1 bg-[var(--color-primary)] shadow-lg flex items-center justify-center"
               >
@@ -78,7 +79,7 @@ export default function Testimonials() {
             <div className="overflow-hidden  mt-5" ref={emblaRef}>
               <div className="flex ">
                 {testimonials.map((item, index) => (
-                  <motion.div key={item._id} initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45, delay: Math.min(index * 0.08, 0.3) }} whileHover={{ y: -4 }} className="flex-[0_0_70%] px-4 ">
+                  <motion.div key={item._id} initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45, delay: Math.min(index * 0.08, 0.3) }} whileHover={{ y: -4 }} className="min-w-0 flex-[0_0_90%] px-3 sm:flex-[0_0_70%] lg:flex-[0_0_50%]">
                     <div className="shadow-lg  min-h-[230px] shadow-green-900 p-4  rounded-md border   border-[var(--color-primary)]">
                       <div className=" mb-4">
                         <div className="flex items-center gap-5 justify-between">
@@ -120,6 +121,9 @@ export default function Testimonials() {
               {scrollSnaps.map((_, index) => (
                 <button
                   key={index}
+                  type="button"
+                  aria-label={`Go to testimonial ${index + 1}`}
+                  aria-current={index === selectedIndex ? "true" : undefined}
                   onClick={() => emblaApi?.scrollTo(index)}
                   className={`h-3 w-3 rounded-full transition-all ${
                     index === selectedIndex

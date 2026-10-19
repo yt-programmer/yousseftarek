@@ -2,7 +2,6 @@ import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
 import React from "react";
 import { Link } from "react-router";
-import aboutMe from "../../assets/about-me.webp";
 import { useSiteContent } from "../../context/SiteContentContext";
 const AboutMe = () => {
   const { content } = useSiteContent();
@@ -45,15 +44,15 @@ const AboutMe = () => {
             </motion.div>
           </div>
           <div className="">
-            <motion.img
+            {about.imageUrl ? <motion.img
               initial={{ opacity: 0, x: 100 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 3 }}
-              src={about.imageUrl || aboutMe}
+              src={about.imageUrl}
               loading="lazy"
               className="max-w-[300px] ml-15 md:ml-0"
-              alt={about.imageAlt || "About Youssef Tarek"}
-            />
+              alt="About Youssef Tarek"
+            /> : null}
           </div>
         </div>
       </div>
