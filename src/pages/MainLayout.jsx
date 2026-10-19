@@ -21,12 +21,30 @@ const MainLayout = () => {
 
   useEffect(() => {
     let active = true;
-    const check = () => fetch(`${import.meta.env.VITE_API}/api/dashboard/maintenance`)
+    let interval;
+    // Maintenance mode is production-domain only. Do not affect localhost or Vercel previews.
+    const configuredSiteUrl = import.meta.env.VITE_SITE_URL?.trim();
+    let isConfiguredProductionDomain = false;
+    try {
+      isConfiguredProductionDomain = Boolean(
+        configuredSiteUrl &&
+        new URL(configuredSiteUrl).origin === window.location.origin
+      );
+    } catch {
+      isConfiguredProductionDomain = false;
+    }
+
+    if (!isConfiguredProductionDomain) {
+      setMaintenance({ enabled: false });
+      return () => { active = false; };
+    }
+
+    const check = () => fetch(`${import.meta.env.VITE_API}/api/dashboard/maintenance`, { cache: "no-store" })
       .then((response) => { if (!response.ok) throw new Error("Maintenance status unavailable"); return response.json(); })
       .then((result) => { if (active) setMaintenance(result.data || { enabled: false }); })
       .catch(() => { if (active) setMaintenance({ enabled: false }); });
     check();
-    const interval = window.setInterval(check, 60000);
+    interval = window.setInterval(check, 60000);
     return () => { active = false; window.clearInterval(interval); };
   }, []);
 
