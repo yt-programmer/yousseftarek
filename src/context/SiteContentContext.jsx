@@ -5,7 +5,6 @@ const defaults = {
   "site": {
     "name": "YOUSSEF TAREK",
     "footerName": "Youssef Tarek",
-    "faviconUrl": "",
     "copyrightText": "All rights reserved."
   },
   "navigation": {

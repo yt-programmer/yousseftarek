@@ -18,48 +18,16 @@ const MainLayout = () => {
     return () => clearTimeout(timer);
   }, []);
 
+
   useEffect(() => {
     let active = true;
-    let interval;
-    // Maintenance mode is production-domain only. Do not affect localhost or Vercel previews.
-    const configuredSiteUrl = import.meta.env.VITE_SITE_URL?.trim();
-    let isConfiguredProductionDomain = false;
-    try {
-      isConfiguredProductionDomain = Boolean(
-        configuredSiteUrl &&
-        new URL(configuredSiteUrl).origin === window.location.origin,
-      );
-    } catch {
-      isConfiguredProductionDomain = false;
-    }
-
-    if (!isConfiguredProductionDomain) {
-      setMaintenance({ enabled: false });
-      return () => {
-        active = false;
-      };
-    }
-
-    const check = () =>
-      fetch(`${import.meta.env.VITE_API}/api/dashboard/maintenance`, {
-        cache: "no-store",
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error("Maintenance status unavailable");
-          return response.json();
-        })
-        .then((result) => {
-          if (active) setMaintenance(result.data || { enabled: false });
-        })
-        .catch(() => {
-          if (active) setMaintenance({ enabled: false });
-        });
+    const check = () => fetch(`${import.meta.env.VITE_API}/api/dashboard/maintenance`)
+      .then((response) => { if (!response.ok) throw new Error("Maintenance status unavailable"); return response.json(); })
+      .then((result) => { if (active) setMaintenance(result.data || { enabled: false }); })
+      .catch(() => { if (active) setMaintenance({ enabled: false }); });
     check();
-    interval = window.setInterval(check, 60000);
-    return () => {
-      active = false;
-      window.clearInterval(interval);
-    };
+    const interval = window.setInterval(check, 60000);
+    return () => { active = false; window.clearInterval(interval); };
   }, []);
 
   useEffect(() => {
@@ -71,10 +39,12 @@ const MainLayout = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (maintenance?.enabled) return <MaintenancePage />;
+
   return (
     <main className="font-display  relative min-h-screen text-white">
-      <MaintenancePage />
       <InteractiveLinesBg />
+
       <section className="relative z-10">
         {loading ? (
           <FirstScreen />
