@@ -440,7 +440,7 @@ function AnalyticsPanel() {
     setError("");
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API}/api/dashboard/overview`,
+        `${import.meta.env.VITE_API}/api/analytics/overview`,
         { withCredentials: true },
       );
       setReport(response.data?.data || null);
