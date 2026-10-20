@@ -6,6 +6,9 @@ import InteractiveLinesBg from "../components/InteractiveLinesBg";
 const NotFoundPage = () => {
   const [timer, setTimer] = useState(10);
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = "NotFound | Youssef Tarek"; // الاسم الجديد للتاب
+  }, []);
 
   useEffect(() => {
     if (timer === 0) {

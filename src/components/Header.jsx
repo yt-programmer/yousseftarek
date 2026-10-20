@@ -4,7 +4,6 @@ import { Link } from "react-router";
 import { HiMiniBars3BottomRight } from "react-icons/hi2";
 import { MdClose } from "react-icons/md";
 import { motion } from "framer-motion";
-import { span } from "framer-motion/client";
 import { HashLink } from "react-router-hash-link";
 import { useSiteContent } from "../context/SiteContentContext";
 

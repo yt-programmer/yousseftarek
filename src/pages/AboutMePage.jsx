@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AboutMeInPage from "../components/AboutMe/AboutMeInPage";
 import SkillsInPage from "../components/AboutMe/SkillsInPage";
 
 const AboutMePage = () => {
+  useEffect(() => {
+    document.title = "About Me | Youssef Tarek"; // الاسم الجديد للتاب
+  }, []);
   return (
     <section className="pt-50 min-h-screen">
       <div className="container mx-auto px-[20px]">

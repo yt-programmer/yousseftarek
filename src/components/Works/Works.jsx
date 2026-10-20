@@ -17,6 +17,7 @@ const Works = () => {
     setPage(1);
     setFilter(nextFilter);
   };
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (page > totalPages) setPage(totalPages); }, [page, totalPages]);
 
   return <div>

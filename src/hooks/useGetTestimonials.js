@@ -5,7 +5,7 @@ const API = `${(import.meta.env.VITE_API || "").replace(/\/$/, "")}/api/testimon
 
 const useGetTestimonials = (limit, page) => {
   const [testimonials, setTestimonials] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const getData = useCallback(async () => {
     setIsLoading(true);

@@ -1,20 +1,22 @@
+import { useState } from "react";
 import axios from "axios";
-import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
-import { FaCloudUploadAlt, FaTimes, FaPlus, FaImage } from "react-icons/fa";
-const API = `${import.meta.env.VITE_API}/api/projects`;
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME?.trim();
-const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET?.trim();
-const initial = { image: "", title: "", skils: "", description: "", link: "", filter: "" };
+import { FaPlus } from "react-icons/fa";
+import ProjectForm from "./ProjectForm";
+import { btn } from "./ui";
+
+const API = `${(import.meta.env.VITE_API || "").replace(/\/$/, "")}/api/projects`;
+
 export default function AddWorks({ refetch }) {
- const [open,setOpen]=useState(false); const [loading,setLoading]=useState(false); const [uploading,setUploading]=useState(false); const [form,setForm]=useState(initial); const [preview,setPreview]=useState(""); const [categories,setCategories]=useState([]);
- useEffect(()=>{if(!open)return;let active=true;axios.get(`${import.meta.env.VITE_API}/api/projects?limit=100&page=1&filter=All`).then(({data})=>{if(active)setCategories((data.data?.filters||[]).filter(Boolean));}).catch(()=>{});return()=>{active=false;};},[open]);
- const change=(e)=>setForm((v)=>({...v,[e.target.name]:e.target.value}));
- const upload=async(file)=>{if(!file)return;if(!CLOUD_NAME||!UPLOAD_PRESET){toast.error("Set VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET in frontend/.env, then restart Vite.");return;} if(!file.type.startsWith("image/")){toast.error("Choose an image file");return;} if(file.size>8*1024*1024){toast.error("Image must be smaller than 8 MB");return;} setUploading(true); try {const data=new FormData();data.append("file",file);data.append("upload_preset",UPLOAD_PRESET);const response=await axios.post(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,data);setForm((v)=>({...v,image:response.data.secure_url}));setPreview(response.data.secure_url);toast.success("Image uploaded");}catch(error){toast.error(error.response?.data?.error?.message||"Image upload failed. Check Cloudinary settings.");}finally{setUploading(false);}};
- const submit=async(e)=>{e.preventDefault();if(!form.image){toast.error("Upload a project image first");return;}setLoading(true);try{await toast.promise(axios.post(API,form,{withCredentials:true}),{loading:"Adding project…",success:"Project added successfully",error:"Could not add project"});await refetch();setForm(initial);setPreview("");setOpen(false);}catch(error){toast.error(error.response?.data?.message||error.message||"Something went wrong");}finally{setLoading(false);}};
- return <><button onClick={()=>setOpen(true)} className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500"><FaPlus/> Add project</button>{open&&<div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm" onMouseDown={(e)=>{if(e.target===e.currentTarget&&!loading&&!uploading)setOpen(false)}}><form onSubmit={submit} className="my-auto max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#111318] p-5 shadow-2xl md:p-7"><div className="mb-6 flex items-start justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.2em] text-emerald-400">Portfolio content</p><h2 className="mt-2 text-2xl font-semibold">Add new project</h2><p className="mt-1 text-sm text-gray-400">Add the project details and upload its cover image.</p></div><button type="button" onClick={()=>setOpen(false)} className="rounded-lg border border-white/10 p-2 text-gray-400 hover:text-white"><FaTimes/></button></div>
- <label className="mb-2 block text-sm font-medium text-gray-300">Project cover</label><label className="mb-5 flex min-h-40 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-emerald-500/40 bg-black/20 text-center transition hover:bg-emerald-500/5">{preview?<img src={preview} alt="Project preview" className="max-h-56 w-full object-contain"/>:<><FaCloudUploadAlt className="text-3xl text-emerald-400"/><span className="mt-3 text-sm text-gray-300">{uploading?"Uploading image…":"Click to choose an image"}</span><span className="mt-1 text-xs text-gray-500">PNG, JPG, WEBP · Max 8 MB</span></>}<input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e)=>upload(e.target.files?.[0])}/></label>
- <div className="grid gap-4 md:grid-cols-2">{[{key:"title",label:"Project name",placeholder:"Project title"},{key:"skils",label:"Technologies",placeholder:"React, Node.js, MongoDB"},{key:"link",label:"Project URL",placeholder:"https://…"},].filter(Boolean).map((field)=><label key={field.key} className="block"><span className="mb-1.5 block text-xs text-gray-400">{field.label}</span><input required name={field.key} value={form[field.key]} onChange={change} placeholder={field.placeholder} className="w-full rounded-lg border border-white/10 bg-[#090a0d] px-3 py-3 text-sm text-white outline-none transition focus:border-emerald-500"/></label>)}</div><label key="filter" className="block"><span className="mb-1.5 block text-xs text-gray-400">Category</span><input required name="filter" list="project-category-options" value={form.filter} onChange={change} placeholder="Choose existing or type a new category" className="w-full rounded-lg border border-white/10 bg-[#090a0d] px-3 py-3 text-sm text-white outline-none transition focus:border-emerald-500"/><datalist id="project-category-options">{categories.map((category)=><option key={category} value={category}/>)}</datalist><span className="mt-1 block text-[11px] text-gray-500">Choose a saved category or type a new one.</span></label><label className="mt-4 block"><span className="mb-1.5 block text-xs text-gray-400">Project description</span><textarea required rows={4} name="description" value={form.description} onChange={change} placeholder="What does this project do?" className="w-full resize-y rounded-lg border border-white/10 bg-[#090a0d] px-3 py-3 text-sm leading-6 text-white outline-none focus:border-emerald-500"/></label>
- <div className="mt-6 flex flex-wrap justify-end gap-3 border-t border-white/10 pt-5"><button type="button" onClick={()=>setOpen(false)} className="rounded-lg border border-white/10 px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5">Cancel</button><button type="submit" disabled={loading||uploading} className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold disabled:opacity-50"><FaImage/>{loading?"Saving…":"Save project"}</button></div></form></div>}</>;
+  const [open, setOpen] = useState(false);
+  const save = async (form) => {
+    await axios.post(API, form, { withCredentials: true });
+    toast.success("Project added");
+    setOpen(false);
+    await refetch();
+  };
+  return <>
+    <button type="button" onClick={() => setOpen(true)} className={btn.primary}><FaPlus /> Add project</button>
+    <ProjectForm open={open} onClose={() => setOpen(false)} title="Add new project" subtitle="Add the project details and upload its cover image." submitLabel="Save project" onSubmit={save} />
+  </>;
 }

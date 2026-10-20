@@ -12,7 +12,8 @@ const Skills = () => {
         <div className="relative md:w-[40%]">
           <div className=" flex items-center gap-5">
             <h2 className="capitalize text-2xl font-bold">
-              <span className="text-[var(--color-primary)]"># </span>{content.skills.title}
+              <span className="text-[var(--color-primary)]"># </span>
+              {content.skills.title}
             </h2>
             <div className="bg-[var(--color-primary)] h-[1px] flex-1"></div>
           </div>
@@ -79,8 +80,8 @@ const Skills = () => {
             <rect x="227.5" y="0.5" width="85" height="85" stroke="#ABB2BF" />
             <mask id="path-53-inside-1_29_371" fill="white">
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M71.5 169H99.75H128V197.25V225.5V253.75H99.75H71.5V225.5H99.75V197.25H71.5V169Z"
               />
             </mask>
@@ -100,8 +101,8 @@ const Skills = () => {
             >
               <rect fill="white" x="14" y="196.25" width="59" height="87" />
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M15 197.25H43.25H71.5V225.5H43.25V253.75H71.5V282H43.25H15V253.75V225.5V197.25Z"
               />
             </mask>

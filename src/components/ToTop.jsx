@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { div } from "framer-motion/client";
 import React from "react";
 
 import { BiSolidArrowToTop } from "react-icons/bi";

@@ -16,38 +16,64 @@ export default function InteractiveLinesBg() {
           zIndex: -10,
         },
         background: {
-          color: "#0b0b0b",
+          color: "#07080a", // لون خلفية أعمق وأفخم
         },
         interactivity: {
           events: {
-            onHover: { enable: true, mode: "grab" },
-            grab: {
-              distance: 140,
-              links: { opacity: 0.06 },
+            onHover: {
+              enable: true,
+              mode: "grab",
+            },
+            onClick: {
+              enable: true,
+              mode: "push", // إضافة جسيمات جديدة عند الضغط بالماوس
             },
           },
           modes: {
-            repulse: {
-              distance: 100,
-              duration: 0.15,
+            grab: {
+              distance: 180,
+              links: {
+                opacity: 0.25,
+                color: "#10b981", // لون الخط عند التفاعل بالماوس (أخضر زمردي)
+              },
+            },
+            push: {
+              quantity: 3,
             },
           },
         },
         particles: {
-          number: { value: 45 },
-          color: { value: "#ffffff" },
-          opacity: { value: 0.05 },
-          size: { value: 1 },
+          number: {
+            value: 60, // زيادة عدد الجسيمات قليلاً لتكون الحيوية أفضل
+            density: {
+              enable: true,
+              area: 900,
+            },
+          },
+          color: {
+            value: "#10b981", // نقاط باللون الأخضر الزمردي
+          },
+          opacity: {
+            value: 0.25, // شفافية هادئة لا تشتت العين عن المحتوى
+          },
+          size: {
+            value: { min: 1, max: 2.5 }, // تباين في أحجام النقاط لإعطاء عمق بصري
+          },
           move: {
             enable: true,
-            speed: 0.2,
-            direction: "right",
-            straight: true,
+            speed: 0.6, // سرعة حركة هادئة وغير مزعجة
+            direction: "none",
+            random: true,
+            straight: false, // حركة طبيعية في كل الاتجاهات
+            outModes: {
+              default: "out",
+            },
           },
           links: {
             enable: true,
-            distance: 180,
-            opacity: 0.07,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.05, // خطوط شبكية شفافة جداً في الخلفية
             width: 1,
           },
         },

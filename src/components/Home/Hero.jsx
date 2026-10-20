@@ -47,14 +47,14 @@ const Hero = () => {
           </motion.div>
         </div>
         <div className="md:mb-0 mb-10 flex flex-col items-center">
-          {hero.photoUrl && (
+          {(hero.photoUrl || DEFAULT_HERO_PHOTO) && (
             <motion.div
               initial={{ background: "conic-gradient(#008236 0deg, transparent 0deg)" }}
               whileInView={{ background: "conic-gradient(#008236 360deg, transparent 360deg)" }}
               transition={{ duration: 3, repeat: Infinity }}
               className="p-1 rounded-full relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]"
             >
-              <img src={hero.photoUrl} className="w-full h-full rounded-full object-cover" alt="Youssef Tarek" loading="eager" fetchPriority="high" />
+              <img src={hero.photoUrl || DEFAULT_HERO_PHOTO} className="w-full h-full rounded-full object-cover" alt="Youssef Tarek" loading="eager" fetchPriority="high" />
             </motion.div>
           )}
 
@@ -80,5 +80,7 @@ const Hero = () => {
     </section>
   );
 };
+
+const DEFAULT_HERO_PHOTO = "/joo.webp"; // shown when no photo was uploaded in the dashboard
 
 export default Hero;

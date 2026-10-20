@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router";
 import ProjectCard from "../common/ProjectCard";
 
@@ -48,16 +48,14 @@ const Projects = () => {
             )}
             {data && data.length !== 0
               ? data.map((project) => (
-                  <>
-                    <ProjectCard
-                      key={project._id}
-                      title={project.title}
-                      description={project.description}
-                      skills={project.skils}
-                      image={project.image}
-                      link={project.link}
-                    />
-                  </>
+                  <ProjectCard
+                    key={project._id}
+                    title={project.title}
+                    description={project.description}
+                    skills={project.skils}
+                    image={project.image}
+                    link={project.link}
+                  />
                 ))
               : !isLoading &&
                 !error && (

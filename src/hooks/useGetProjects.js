@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const useGetProjects = (limit, page, filter = "All") => {
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [filters, setFilters] = useState([]);
   const [total, setTotal] = useState(0);
