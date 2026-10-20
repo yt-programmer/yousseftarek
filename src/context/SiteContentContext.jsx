@@ -152,9 +152,15 @@ export const SiteContentProvider = ({ children }) => {
       const response = await axios.get(
         `${import.meta.env.VITE_API}/api/site-content`,
       );
-      console.log("API Response:", response);
-      if (response.data?.data?.content) {
-        const remote = response.data.data.content;
+
+      // بنجيب الـ content بكل الاحتمالات الممكنة بناءً على شكل الـ Response اللي ظهر في البرودكشن
+      const remote =
+        response.data?.data?.content ||
+        response.data?.content ||
+        response.data?.data ||
+        response.data;
+
+      if (remote && typeof remote === "object") {
         setContent((current) => ({
           ...current,
           ...remote,
@@ -165,8 +171,8 @@ export const SiteContentProvider = ({ children }) => {
           },
         }));
       }
-    } catch {
-      // keep the built-in default content when the API is unreachable
+    } catch (err) {
+      console.error("Failed to fetch site content:", err);
     } finally {
       setLoading(false);
     }
