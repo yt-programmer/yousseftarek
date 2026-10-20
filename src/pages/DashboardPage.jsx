@@ -43,12 +43,12 @@ import { btn } from "../components/Dashboard/ui";
 const API = `${import.meta.env.VITE_API}/api/site-content`;
 const SECTIONS = [
   ["hero", "Hero"],
-  ["about", "About"],
-  ["works", "Works"],
+  ["homeAbout", "About"],
+  ["projects", "Works"],
   ["skills", "Skills"],
-  ["contact", "Contact"],
-  ["testimonials", "Testimonials page"],
+  ["contactSection", "Contact"],
   ["aboutPage", "About page"],
+  ["testimonials", "Testimonials Page"],
   ["contactPage", "Contact page"],
   ["socials", "Social links"],
   ["navigation", "Navigation labels"],
