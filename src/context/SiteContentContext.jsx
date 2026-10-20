@@ -152,6 +152,7 @@ export const SiteContentProvider = ({ children }) => {
       const response = await axios.get(
         `${import.meta.env.VITE_API}/api/site-content`,
       );
+      console.log("API Response:", response);
       if (response.data?.data?.content) {
         const remote = response.data.data.content;
         setContent((current) => ({
